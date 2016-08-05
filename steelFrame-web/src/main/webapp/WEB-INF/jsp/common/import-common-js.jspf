@@ -1,0 +1,4 @@
+
+<script type="text/javascript" src="${ctx}/plugins/jquery/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="${ctx}/plugins/jquery/jquery.cookie.js"></script>
+<script type="text/javascript" src="${ctx}/plugins/jquery/jquery.tips.js"></script>

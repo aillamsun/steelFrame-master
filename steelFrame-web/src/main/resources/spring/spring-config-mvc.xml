@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+
+    <!-- 开启controller注解支持 -->
+    <context:component-scan base-package="com.sung.sframe" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+
+
+    <!--第一种处理静态资源请求-->
+
+    <!-- 当在web.xml 中   DispatcherServlet使用 <url-pattern>/</url-pattern> 映射时，能映射静态资源 -->
+    <!-- 这个标签对于匹配规则为"/"的DispatcherServlet才生效 -->
+    <!--对进入DispatcherServlet的URL进行筛查，如果发现是静态资源的请求，
+    就将该请求转由Web应用服务器默认的Servlet处理，如果不是静态资源的请求，才由DispatcherServlet继续处理-->
+   <mvc:default-servlet-handler/>
+
+    <!--一般Web应用服务器默认的Servlet名称是"default"，因此DefaultServletHttpRequestHandler可以找到它。
+    如果你所有的Web应用服务器的默认Servlet名称不是"default"，则需要通过default-servlet-name属性显示指定：-->
+    <!--<mvc:default-servlet-handler default-servlet-name="所使用的Web服务器默认使用的Servlet名称"/>-->
+
+    <!--第二种处理静态资源请求 采用<mvc:resources />-->
+
+   <!-- <mvc:default-servlet-handler />将静态资源的处理经由Spring MVC框架交回Web应用服务器处理。而<mvc:resources />更进一步，由Spring MVC框架自己处理静态资源，并添加一些有用的附加值功能。
+    首先，<mvc:resources />允许静态资源放在任何地方，如WEB-INF目录下、类路径下等，你甚至可以将JavaScript等静态文件打到JAR包中。通过location属性指定静态资源的位置，由于location属性是Resources类型，因此可以使用诸如"classpath:"等的资源前缀指定资源位置。传统Web容器的静态资源只能放在Web容器的根路径下，<mvc:resources />完全打破了这个限制。
+    其次，<mvc:resources />依据当前著名的Page Speed、YSlow等浏览器优化原则对静态资源提供优化。你可以通过cacheSeconds属性指定静态资源在浏览器端的缓存时间，一般可将该时间设置为一年，以充分利用浏览器端的缓存。在输出静态资源时，会根据配置设置好响应报文头的Expires 和 Cache-Control值。
+    在接收到静态资源的获取请求时，会检查请求头的Last-Modified值，如果静态资源没有发生变化，则直接返回303相应状态码，提示客户端使用浏览器缓存的数据，而非将静态资源的内容输出到客户端，以充分节省带宽，提高程序性能-->
+
+    <!-- 对静态资源文件的访问  restful-->
+    <!--<mvc:resources mapping="/static/**" location="/,/static/" />-->
+    <!--<mvc:resources mapping="/plugins/**" location="/,/plugins/" />-->
+
+
+    <!--RequestMappingHandlerAdapter-->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <ref bean="stringHttpMessageConverter"/>
+            <ref bean="marshallingHttpMessageConverter"/>
+            <ref bean="fastJsonHttpMessageConverter"/>
+        </mvc:message-converters>
+        <!--<mvc:argument-resolvers>
+            <bean class="com.sung.sframe.common.web.bind.method.annotation.PageableMethodArgumentResolver"/>
+            <bean class="com.sung.sframe.common.web.bind.method.annotation.SearchableMethodArgumentResolver"/>
+            <bean class="com.sung.sframe.common.web.bind.method.annotation.FormModelMethodArgumentResolver"/>
+            <bean class="com.sung.sframe.sys.user.web.bind.method.CurrentUserMethodArgumentResolver"/>
+        </mvc:argument-resolvers>-->
+    </mvc:annotation-driven>
+
+    <!-- StringHttpMessageConverter编码为UTF-8，防止乱码 -->
+    <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+        <constructor-arg value="UTF-8"/>
+        <property name="supportedMediaTypes">
+            <list>
+                <bean class="org.springframework.http.MediaType">
+                    <constructor-arg index="0" value="text"/>
+                    <constructor-arg index="1" value="plain"/>
+                    <constructor-arg index="2" value="UTF-8"/>
+                </bean>
+                <bean class="org.springframework.http.MediaType">
+                    <constructor-arg index="0" value="*"/>
+                    <constructor-arg index="1" value="*"/>
+                    <constructor-arg index="2" value="UTF-8"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!--XML 处理配置 -->
+    <bean id="marshallingHttpMessageConverter"
+          class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+        <property name="marshaller" ref="castorMarshaller"/>
+        <property name="unmarshaller" ref="castorMarshaller"/>
+    </bean>
+    <bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller"/>
+
+
+    <bean id="fastJsonHttpMessageConverter"
+          class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/json;charset=UTF-8</value>
+            </list>
+        </property>
+
+        <!--<property name="serializerFeature">-->
+            <!--这个地方加上这个功能吧，能自己配置一些东西，比如时间的格式化，null输出""等等-->
+        <!--</property>-->
+    </bean>
+
+
+
+    <!-- 拦截器设置 -->
+    <mvc:interceptors>
+        <bean class="org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor">
+            <constructor-arg ref="conversionService"/>
+        </bean>
+
+
+        <bean class="com.sung.sframe.common.web.interceptor.SetCommonDataInterceptor">
+            <!--过滤的URL 地址-->
+            <property name="excludeUrlPatterns">
+                <value>
+
+                </value>
+            </property>
+        </bean>
+
+
+        <!--登录拦截器-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**/**"/>
+            <!--过滤不拦截的url-->
+           <!-- <mvc:exclude-mapping path="/admin/polling"/>-->
+            <bean class="com.sung.sframe.interceptor.LoginHandlerInterceptor"/>
+        </mvc:interceptor>
+
+    </mvc:interceptors>
+
+<!--
+    &lt;!&ndash; 配置一个缺省映射的UrlHandlerMap，尝试通配URL &ndash;&gt;
+    <bean id="myControllerClassNameHandlerMapping" class="com.sung.sframe.controller.ControllerClassNameHandlerMapping">
+        &lt;!&ndash; 打开URL大小写区分 &ndash;&gt;
+        <property name="caseSensitive" value="true" />
+        &lt;!&ndash; 配置框架的包名前缀,默认值是com.qiyongkang.，这里是区分大小写的 &ndash;&gt;
+        <property name="frameworkPackagePrefixs" value="com.sung.sframe." />
+        &lt;!&ndash; 配置Controller包后缀，默认值是controller，这里是区分大小写的 &ndash;&gt;
+        <property name="controllerPackageSuffixs" value="controller" />
+        &lt;!&ndash; 配置Controller类后缀，默认值是Controller，这里是区分大小写的 &ndash;&gt;
+        <property name="controllerClassSuffixs" value="Controller" />
+    </bean>-->
+
+
+    <bean id="contentNegotiationManagerFactoryBean"  class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="defaultContentType" value="text/html"/>
+        <property name="ignoreAcceptHeader" value="true"/>
+        <property name="favorPathExtension" value="true"/>
+        <property name="favorParameter" value="false"/>
+        <property name="mediaTypes">
+            <map>
+                <entry key="atom" value="application/atom+xml"/>
+                <entry key="html" value="text/html"/>
+                <entry key="json" value="application/json"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- 内容协商管理器  -->
+    <bean id="contentNegotiationManager" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="contentNegotiationManager">
+            <bean class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+                <property name="defaultContentType" value="text/html"/>
+                <property name="mediaTypes">
+                    <map>
+                        <entry key="json" value="application/json"/>
+                        <entry key="xml" value="application/xml"/>
+                        <entry key="html" value="text/html"/>
+                    </map>
+                </property>
+            </bean>
+        </property>
+        <property name="viewResolvers">
+            <list>
+                <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                    <property name="prefix" value="/WEB-INF/jsp/"/>
+                    <property name="suffix" value=".jsp"/>
+                </bean>
+            </list>
+        </property>
+        <property name="defaultViews">
+            <list>
+               <!-- <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+                <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+                    <property name="marshaller" ref="castorMarshaller"/>
+                </bean>-->
+                <bean class="com.alibaba.fastjson.support.spring.FastJsonJsonView" />
+                <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+                    <property name="marshaller" ref="castorMarshaller"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+
+    <!--文件上传-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="104857600"/>
+    </bean>
+
+    <!--异常统一处理-->
+    <bean id="exceptionResolver" class="com.sung.sframe.resolver.MyHandlerExceptionResolver"></bean>
+
+
+    <import resource="spring-mvc-shiro.xml"/>
+</beans>

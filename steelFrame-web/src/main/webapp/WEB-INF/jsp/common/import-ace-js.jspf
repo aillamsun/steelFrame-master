@@ -1,0 +1,2 @@
+    <script src="${ctx}/static/ace/js/html5shiv.js"></script>
+    <script src="${ctx}/static/ace/js/respond.js"></script>
