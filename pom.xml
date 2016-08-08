@@ -68,6 +68,10 @@
         <mybatis.spring.version>1.2.4</mybatis.spring.version>
         <mysql.version>5.1.36</mysql.version>
 
+        <!--Mongodb-->
+        <mongo.driver.version>3.2.2</mongo.driver.version>
+        <spring.mongo.version>1.8.4.RELEASE</spring.mongo.version>
+
 
         <shiro.version>1.2.3</shiro.version>
         <jcaptcha.version>2.0-alpha-1</jcaptcha.version>
@@ -250,6 +254,30 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
+        </dependency>
+
+
+        <!-- Spring Data Mongo -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>${mongo.driver.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>${spring.mongo.version}</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+        </dependency>-->
+
+        <!--Spring Data Redis-->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>1.6.4.RELEASE</version>
         </dependency>
 
         <dependency>

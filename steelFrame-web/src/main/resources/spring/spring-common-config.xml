@@ -72,5 +72,7 @@
     </bean>
 
     <import resource="spring-config-mybatis.xml"/>
+    <!--<import resource="spring-config-mongo.xml"/>-->
+    <!--<import resource="spring-config-redis.xml"/>-->
 
 </beans>

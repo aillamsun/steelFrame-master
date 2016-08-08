@@ -10,10 +10,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- *
  * Created by sungang on 2016/6/10.
  */
-public abstract class AbstarctBaseController<M extends BaseModel>{
+public abstract class AbstarctBaseController<M extends BaseModel> {
     /**
      * 实体类型
      */
@@ -25,6 +24,7 @@ public abstract class AbstarctBaseController<M extends BaseModel>{
         this.entityClass = ReflectUtils.findParameterizedType(getClass(), 0);
         setViewPrefix(defaultViewPrefix());
     }
+
     /**
      * 设置通用数据
      *
@@ -33,6 +33,7 @@ public abstract class AbstarctBaseController<M extends BaseModel>{
     protected void setCommonData(Model model) {
 
     }
+
     /**
      * 当前模块 视图的前缀
      * 默认
@@ -57,6 +58,7 @@ public abstract class AbstarctBaseController<M extends BaseModel>{
             throw new IllegalStateException("can not instantiated model : " + this.entityClass, e);
         }
     }
+
     /**
      * 获取视图名称：即prefixViewName + "/" + suffixName
      *
@@ -112,4 +114,7 @@ public abstract class AbstarctBaseController<M extends BaseModel>{
 
         return currentViewPrefix;
     }
+
+
+
 }
