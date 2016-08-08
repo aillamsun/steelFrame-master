@@ -3,57 +3,14 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:context="http://www.springframework.org/schema/context"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx.xsd
        http://www.springframework.org/schema/aop
-       http://www.springframework.org/schema/aop/spring-aop.xsd
-       http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd">
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <!-- 启用注解 -->
-    <context:annotation-config />
-    <!-- 启动组件扫描，排除@Controller组件，该组件由Spring mvc配置文件扫描 -->
-    <context:component-scan base-package="com.sung.sframe">
-        <context:exclude-filter type="annotation"  expression="org.springframework.stereotype.Controller" />
-    </context:component-scan>
-
-    <!-- 加载属性文件 -->
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations">
-            <list>
-                <value>classpath:db.properties</value>
-                <value>classpath:system.properties</value>
-            </list>
-        </property>
-    </bean>
-
-
-
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-        <property name="driverClassName" value="${jdbc.driverClass}"/>
-        <property name="url" value="${jdbc.url}"/>
-        <property name="username" value="${username}"/>
-        <property name="password" value="${password}"/>
-
-        <property name="filters" value="stat"/>
-
-        <property name="maxActive" value="20"/>
-        <property name="initialSize" value="1"/>
-        <property name="maxWait" value="60000"/>
-        <property name="minIdle" value="1"/>
-
-        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
-        <property name="minEvictableIdleTimeMillis" value="300000"/>
-
-        <property name="validationQuery" value="SELECT 'x'"/>
-        <property name="testWhileIdle" value="true"/>
-        <property name="testOnBorrow" value="false"/>
-        <property name="testOnReturn" value="false"/>
-    </bean>
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
@@ -140,31 +97,4 @@
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-
-
-
-    <!-- 类型转换及数据格式化 -->
-    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"/>
-
-
-
-    <!-- 国际化的消息资源文件（本系统中主要用于显示/错误消息定制） -->
-    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-        <property name="basenames">
-            <list>
-                <!-- 在web环境中一定要定位到classpath 否则默认到当前web应用下找  -->
-                <value>messages.welcome</value>
-            </list>
-        </property>
-        <property name="useCodeAsDefaultMessage" value="false"/>
-        <property name="defaultEncoding" value="UTF-8"/>
-        <property name="cacheSeconds" value="60"/>
-    </bean>
-
-
-
-    <!--引入-->
-    <import resource="spring-config-shiro.xml"/>
-    <import resource="spring-config-cache.xml"/>
-
 </beans>

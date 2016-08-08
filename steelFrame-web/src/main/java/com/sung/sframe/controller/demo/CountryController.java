@@ -26,9 +26,9 @@ public class CountryController extends BaseController<Country> {
     @Autowired
     private CountryService countryService;
 
-    private String page_list = "list";
+    private String page_list = "/demo/country/list";
 
-    @RequestMapping(value = {"list", "index", "index.html", ""})
+    @RequestMapping(value = {"","list", "index", "index.html", ""})
     public String getList(Country country, @RequestParam(required = false, defaultValue = "1") int page,
                           @RequestParam(required = false, defaultValue = "10") int rows, Model model) {
         List<Country> countryList = countryService.selectByCountry(country, page, rows);
@@ -37,7 +37,7 @@ public class CountryController extends BaseController<Country> {
         model.addAttribute("queryParam", country);
         model.addAttribute("page", page);
         model.addAttribute("rows", rows);
-        return viewName(page_list);
+        return page_list;
     }
 
     /**
@@ -71,13 +71,13 @@ public class CountryController extends BaseController<Country> {
         } else {
             countryService.insert(country);
         }
-        return redirectToUrl(page_list);
+        return "redirect:" + page_list;
     }
 
     @RequestMapping("delete")
     public String delete(Integer id) {
         countryService.delete(id);
-        return redirectToUrl(page_list);
+        return "redirect:" + page_list;
     }
 
 }

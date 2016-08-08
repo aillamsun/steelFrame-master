@@ -103,6 +103,7 @@
 
     <!-- 拦截器设置 -->
     <mvc:interceptors>
+
         <bean class="org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor">
             <constructor-arg ref="conversionService"/>
         </bean>
@@ -112,7 +113,6 @@
             <!--过滤的URL 地址-->
             <property name="excludeUrlPatterns">
                 <value>
-
                 </value>
             </property>
         </bean>
@@ -127,20 +127,6 @@
         </mvc:interceptor>
 
     </mvc:interceptors>
-
-<!--
-    &lt;!&ndash; 配置一个缺省映射的UrlHandlerMap，尝试通配URL &ndash;&gt;
-    <bean id="myControllerClassNameHandlerMapping" class="com.sung.sframe.controller.ControllerClassNameHandlerMapping">
-        &lt;!&ndash; 打开URL大小写区分 &ndash;&gt;
-        <property name="caseSensitive" value="true" />
-        &lt;!&ndash; 配置框架的包名前缀,默认值是com.qiyongkang.，这里是区分大小写的 &ndash;&gt;
-        <property name="frameworkPackagePrefixs" value="com.sung.sframe." />
-        &lt;!&ndash; 配置Controller包后缀，默认值是controller，这里是区分大小写的 &ndash;&gt;
-        <property name="controllerPackageSuffixs" value="controller" />
-        &lt;!&ndash; 配置Controller类后缀，默认值是Controller，这里是区分大小写的 &ndash;&gt;
-        <property name="controllerClassSuffixs" value="Controller" />
-    </bean>-->
-
 
     <bean id="contentNegotiationManagerFactoryBean"  class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
         <property name="defaultContentType" value="text/html"/>
@@ -202,5 +188,5 @@
     <bean id="exceptionResolver" class="com.sung.sframe.resolver.MyHandlerExceptionResolver"></bean>
 
 
-    <import resource="spring-mvc-shiro.xml"/>
+    <!--<import resource="spring-mvc-shiro.xml"/>-->
 </beans>
