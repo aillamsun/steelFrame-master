@@ -2,6 +2,7 @@ package com.sung.sframe.common.dao.mongodb;
 
 import com.sung.sframe.common.exception.SteelFrameBaseException;
 import com.sung.sframe.common.model.BaseModel;
+import com.sung.sframe.common.query.Pager;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
@@ -64,11 +65,19 @@ public interface BaseMongoDao<T extends BaseModel> {
     T findById(String id, String collectionName) throws SteelFrameBaseException;
 
     /**
-     * 更新数据
+     * 通过条件查询更新数据
      * @param query
      * @param update
      */
     void update(Query query, Update update) throws SteelFrameBaseException;
+
+    /**
+     * 通过条件查询更新数据
+     * @param query
+     * @param update
+     * @throws SteelFrameBaseException
+     */
+    void updateFirst(Query query, Update update) throws SteelFrameBaseException;
 
     /**
      * 根据 id 跟新数据
@@ -90,5 +99,14 @@ public interface BaseMongoDao<T extends BaseModel> {
      * @param t
      * @return
      */
-    long count(T t);
+    long count(T t)throws SteelFrameBaseException;
+
+    /**
+     * 分页查询数据
+     * @param pager 分页对象
+     * @param entity 查询条件
+     * @return
+     * @throws SteelFrameBaseException
+     */
+    public Pager<T> findByPage(Pager<T> pager,T entity)throws SteelFrameBaseException;
 }
