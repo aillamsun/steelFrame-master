@@ -20,7 +20,6 @@
     <modules>
         <module>steelFrame-common</module>
         <module>steelFrame-web</module>
-        <module>steelFrame-spring-boot-web</module>
     </modules>
 
     <properties>
