@@ -32,6 +32,46 @@ public enum QueryType {
             return new Criteria();
         }
     },
+    GT {
+        @Override
+        public Criteria buildCriteria(QueryField queryFieldAnnotation, Field field, Object value) {
+            if (check(queryFieldAnnotation, field, value)) {
+                String queryField = getQueryFieldName(queryFieldAnnotation, field);
+                return Criteria.where(queryField).gt(value.toString());
+            }
+            return new Criteria();
+        }
+    },
+    GTE {
+        @Override
+        public Criteria buildCriteria(QueryField queryFieldAnnotation, Field field, Object value) {
+            if (check(queryFieldAnnotation, field, value)) {
+                String queryField = getQueryFieldName(queryFieldAnnotation, field);
+                return Criteria.where(queryField).gte(value.toString());
+            }
+            return new Criteria();
+        }
+    },
+    LT {
+        @Override
+        public Criteria buildCriteria(QueryField queryFieldAnnotation, Field field, Object value) {
+            if (check(queryFieldAnnotation, field, value)) {
+                String queryField = getQueryFieldName(queryFieldAnnotation, field);
+                return Criteria.where(queryField).lt(value.toString());
+            }
+            return new Criteria();
+        }
+    },
+    LTE {
+        @Override
+        public Criteria buildCriteria(QueryField queryFieldAnnotation, Field field, Object value) {
+            if (check(queryFieldAnnotation, field, value)) {
+                String queryField = getQueryFieldName(queryFieldAnnotation, field);
+                return Criteria.where(queryField).lte(value.toString());
+            }
+            return new Criteria();
+        }
+    },
     IN {
         @Override
         public Criteria buildCriteria(QueryField queryFieldAnnotation, Field field, Object value) {
@@ -54,6 +94,7 @@ public enum QueryType {
 
     /**
      * 如果实体bean的字段上QueryField注解没有设置attribute属性时，默认为该字段的名称
+     *
      * @param field
      * @return
      */

@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 封装MongoDB
@@ -32,19 +33,19 @@ public interface BaseMongoDao<T extends BaseModel> {
 
     /**
      * 查询多个数据
-     * @param t
+     * @param entity
      * @return
      * @throws SteelFrameBaseException
      */
-    List<T> find(T t) throws SteelFrameBaseException;
+    List<T> find(T entity) throws SteelFrameBaseException;
 
     /**
      * 查询单个数据
      *
-     * @param t
+     * @param entity
      * @return
      */
-    T findOne(T t) throws SteelFrameBaseException;
+    T findOne(T entity) throws SteelFrameBaseException;
 
     /**
      * 通过ID获取记录
@@ -60,21 +61,29 @@ public interface BaseMongoDao<T extends BaseModel> {
      * @param collectionName
      * @return
      */
-    T findById(String id, String collectionName);
+    T findById(String id, String collectionName) throws SteelFrameBaseException;
 
     /**
      * 更新数据
      * @param query
      * @param update
      */
-    void update(Query query, Update update);
+    void update(Query query, Update update) throws SteelFrameBaseException;
 
     /**
      * 根据 id 跟新数据
      * @param id
-     * @param t
+     * @param entity
      */
-    void updateById(String id, T t);
+    void updateById(String id, T entity) throws SteelFrameBaseException;
+
+    /**
+     * 批量更新
+     * Map<> key -> id , value - T
+     * @param entitys
+     * @throws SteelFrameBaseException
+     */
+    void batchUpdate(Map<String,T> entitys) throws SteelFrameBaseException;
 
     /**
      * count

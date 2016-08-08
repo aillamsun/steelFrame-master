@@ -1,6 +1,7 @@
 package com.sung.sframe.common.dao.mongodb;
 
 import com.sung.sframe.common.dao.mongodb.annotations.QueryField;
+import com.sung.sframe.common.exception.SteelFrameBaseException;
 import com.sung.sframe.common.model.BaseModel;
 import com.sung.sframe.common.utils.ReflectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +9,11 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by sungang on 2016/8/8.
@@ -34,64 +37,83 @@ public abstract class BaseMongoDaoImpl<T extends BaseModel> implements BaseMongo
 
 
     @Override
-    public List<T> find(T t) {
-        Query query = buildBaseQuery(t);
+    public List<T> find(T entity) {
+        Assert.isNull(entity,"entity is not null");
+        Query query = buildBaseQuery(entity);
         return mongoTemplate.find(query, entityClass);
     }
 
 
     @Override
-    public T findOne(T t) {
-        Query query = buildBaseQuery(t);
+    public T findOne(T entity) {
+        Assert.isNull(entity,"entity is not null");
+        Query query = buildBaseQuery(entity);
         return mongoTemplate.findOne(query, entityClass);
     }
 
 
     @Override
     public void update(Query query, Update update) {
+        Assert.isNull(query,"query is not null");
+        Assert.isNull(update,"update is not null");
         mongoTemplate.findAndModify(query, update, entityClass);
     }
 
     @Override
-    public void updateById(String id, T t) {
+    public void updateById(String id, T entity) {
+        Assert.isNull(id,"id is not null");
+        Assert.isNull(entity,"entity is not null");
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(id));
-        Update update = buildBaseUpdate(t);
+        Update update = buildBaseUpdate(entity);
         update(query, update);
     }
 
     @Override
+    public void batchUpdate(Map<String, T> updates) throws SteelFrameBaseException {
+        Assert.isNull(updates,"你要更新的数据不能null");
+        for (String id : updates.keySet()) {
+            updateById(id,updates.get(id));
+        }
+    }
+
+    @Override
     public T save(T entity) {
+        Assert.isNull(entity,"entity is not null");
         mongoTemplate.insert(entity);
         return entity;
     }
 
     @Override
     public T findById(String id) {
+        Assert.isNull(id,"id is not null");
         return mongoTemplate.findById(id, entityClass);
     }
 
 
     @Override
     public T findById(String id, String collectionName) {
+        Assert.isNull(id,"id is not null");
+        Assert.isNull(collectionName,"collectionName is not null");
         return mongoTemplate.findById(id, entityClass, collectionName);
     }
 
 
     @Override
-    public long count(T t) {
-        Query query = buildBaseQuery(t);
+    public long count(T entity) {
+        Assert.isNull(entity,"entity is not null");
+        Query query = buildBaseQuery(entity);
         return mongoTemplate.count(query, entityClass);
     }
 
 
-    private Query buildBaseQuery(T t) {
+    private Query buildBaseQuery(T entity) {
         Query query = new Query();
-        Field[] fields = t.getClass().getDeclaredFields();
+        Field[] fields = entity.getClass().getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
             try {
-                Object value = field.get(t);
+                Object value = field.get(entity);
                 if (value != null) {
                     QueryField queryField = field.getAnnotation(QueryField.class);
                     if (queryField != null) {
@@ -107,16 +129,16 @@ public abstract class BaseMongoDaoImpl<T extends BaseModel> implements BaseMongo
 
     /**
      *
-     * @param t
+     * @param entity
      * @return
      */
-    private Update buildBaseUpdate(T t) {
+    private Update buildBaseUpdate(T entity) {
         Update update = new Update();
-        Field[] fields = t.getClass().getDeclaredFields();
+        Field[] fields = entity.getClass().getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
             try {
-                Object value = field.get(t);
+                Object value = field.get(entity);
                 if (value != null) {
                     update.set(field.getName(), value);
                 }
@@ -127,5 +149,5 @@ public abstract class BaseMongoDaoImpl<T extends BaseModel> implements BaseMongo
         return update;
     }
 
-    protected abstract void setMongoTemplate(MongoTemplate mongoTemplate);
+//    protected abstract void setMongoTemplate(MongoTemplate mongoTemplate);
 }
