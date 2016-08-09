@@ -12,10 +12,13 @@ import java.util.List;
  */
 public class Pager<T extends BaseModel> {
 
+    private static final int DEFAULT_SKIP = 0;
+    private static final int DEFAULT_LIMIT = 20;
+
     /**
      * 一页数据默认20条
      */
-    private int pageSize = 20;
+    private int pageSize = DEFAULT_LIMIT;
     /**
      * 当前页码
      */

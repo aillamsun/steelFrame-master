@@ -108,5 +108,5 @@ public interface BaseMongoDao<T extends BaseModel> {
      * @return
      * @throws SteelFrameBaseException
      */
-    public Pager<T> findByPage(Pager<T> pager,T entity)throws SteelFrameBaseException;
+    Pager<T> findByPage(Pager<T> pager,T entity)throws SteelFrameBaseException;
 }

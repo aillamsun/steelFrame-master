@@ -21,8 +21,7 @@ import java.util.Map;
  */
 public abstract class BaseMongoDaoImpl<T extends BaseModel> implements BaseMongoDao<T> {
 
-    private static final int DEFAULT_SKIP = 0;
-    private static final int DEFAULT_LIMIT = 200;
+
 
     /**
      * 实体类型
@@ -38,7 +37,7 @@ public abstract class BaseMongoDaoImpl<T extends BaseModel> implements BaseMongo
 
 
     @Override
-    public List<T> find(T entity) {
+    public List<T> find(T entity)  throws SteelFrameBaseException {
         Assert.isNull(entity, "entity is not null");
         Query query = buildBaseQuery(entity);
         return mongoTemplate.find(query, entityClass);
@@ -46,7 +45,7 @@ public abstract class BaseMongoDaoImpl<T extends BaseModel> implements BaseMongo
 
 
     @Override
-    public T findOne(T entity) {
+    public T findOne(T entity)  throws SteelFrameBaseException {
         Assert.isNull(entity, "entity is not null");
         Query query = buildBaseQuery(entity);
         return mongoTemplate.findOne(query, entityClass);
@@ -54,7 +53,7 @@ public abstract class BaseMongoDaoImpl<T extends BaseModel> implements BaseMongo
 
 
     @Override
-    public void update(Query query, Update update) {
+    public void update(Query query, Update update)  throws SteelFrameBaseException {
         Assert.isNull(query, "query is not null");
         Assert.isNull(update, "update is not null");
         mongoTemplate.findAndModify(query, update, entityClass);
@@ -68,7 +67,7 @@ public abstract class BaseMongoDaoImpl<T extends BaseModel> implements BaseMongo
     }
 
     @Override
-    public void updateById(String id, T entity) {
+    public void updateById(String id, T entity)  throws SteelFrameBaseException {
         Assert.isNull(id, "id is not null");
         Assert.isNull(entity, "entity is not null");
         Query query = new Query();
@@ -86,21 +85,21 @@ public abstract class BaseMongoDaoImpl<T extends BaseModel> implements BaseMongo
     }
 
     @Override
-    public T save(T entity) {
+    public T save(T entity)  throws SteelFrameBaseException {
         Assert.isNull(entity, "entity is not null");
         mongoTemplate.insert(entity);
         return entity;
     }
 
     @Override
-    public T findById(String id) {
+    public T findById(String id)  throws SteelFrameBaseException {
         Assert.isNull(id, "id is not null");
         return mongoTemplate.findById(id, entityClass);
     }
 
 
     @Override
-    public T findById(String id, String collectionName) {
+    public T findById(String id, String collectionName)  throws SteelFrameBaseException {
         Assert.isNull(id, "id is not null");
         Assert.isNull(collectionName, "collectionName is not null");
         return mongoTemplate.findById(id, entityClass, collectionName);
@@ -108,7 +107,7 @@ public abstract class BaseMongoDaoImpl<T extends BaseModel> implements BaseMongo
 
 
     @Override
-    public long count(T entity) {
+    public long count(T entity)  throws SteelFrameBaseException {
         Assert.isNull(entity, "entity is not null");
         Query query = buildBaseQuery(entity);
         return mongoTemplate.count(query, entityClass);
