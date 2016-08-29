@@ -1,8 +1,9 @@
 package com.sung.sframe.controller.demo;
 
 import com.github.pagehelper.PageInfo;
-import com.sung.sframe.common.controller.BaseController;
-import com.sung.sframe.common.utils.LogUtils;
+import com.sung.sframe.common.controller.BaseCRUDController;
+import com.sung.sframe.common.service.BaseService;
+import com.sung.sframe.common.service.IService;
 import com.sung.sframe.model.Country;
 import com.sung.sframe.model.CountryQueryModel;
 import com.sung.sframe.service.CountryService;
@@ -21,7 +22,12 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/demo/country")
-public class CountryController extends BaseController<Country> {
+public class CountryController extends BaseCRUDController<Country> {
+
+    @Override
+    public IService<Country> getBaseService() {
+        return countryService;
+    }
 
     @Autowired
     private CountryService countryService;
@@ -64,15 +70,15 @@ public class CountryController extends BaseController<Country> {
         return result;
     }
 
-    @RequestMapping(value = "save", method = RequestMethod.POST)
-    public String save(Country country) {
-        if (country.getId() != null) {
-            countryService.updateAll(country);
-        } else {
-            countryService.insert(country);
-        }
-        return "redirect:" + page_list;
-    }
+//    @RequestMapping(value = "save", method = RequestMethod.POST)
+//    public String save(Country country) {
+//        if (country.getId() != null) {
+//            countryService.updateAll(country);
+//        } else {
+//            countryService.insert(country);
+//        }
+//        return "redirect:" + page_list;
+//    }
 
     @RequestMapping("delete")
     public String delete(Integer id) {

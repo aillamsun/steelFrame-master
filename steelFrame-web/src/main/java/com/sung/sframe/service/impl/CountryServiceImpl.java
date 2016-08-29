@@ -37,6 +37,7 @@ public class CountryServiceImpl extends BaseService<Country> implements CountryS
         if (country.getId() != null) {
             criteria.andEqualTo("id", country.getId());
         }
+
         //分页查询
         PageHelper.startPage(page, rows);
         return selectByExample(example);
