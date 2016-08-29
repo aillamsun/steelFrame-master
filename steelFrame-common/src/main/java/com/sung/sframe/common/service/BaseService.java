@@ -7,10 +7,9 @@ import tk.mybatis.mapper.common.Mapper;
 import java.util.List;
 
 /**
- * Created by liuzh on 2014/12/11.
+ * Created by sungang on 2016/6/9.
  */
-public abstract class BaseService<T extends BaseModel> implements IService<T> {
-
+public class BaseService<T extends BaseModel> implements IService<T> {
 
 
     @Autowired

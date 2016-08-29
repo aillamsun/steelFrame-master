@@ -1,9 +1,12 @@
 package com.sung.sframe.common.controller;
 
 import com.sung.sframe.common.model.BaseModel;
+import com.sung.sframe.common.service.BaseService;
+import com.sung.sframe.common.service.IService;
 import com.sung.sframe.common.utils.LogUtils;
 import com.sung.sframe.common.utils.ReflectUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,13 +15,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * Created by sungang on 2016/6/10.
  */
-public abstract class AbstarctBaseController<M extends BaseModel> {
+public abstract class AbstarctBaseController<M extends BaseModel> implements BaseController{
     /**
      * 实体类型
      */
     protected final Class<M> entityClass;
 
     private String viewPrefix;
+
+
+//    @Autowired
+//    protected BaseService<M> baseService;
+
+    public abstract IService<M> getBaseService();
+
 
     protected AbstarctBaseController() {
         this.entityClass = ReflectUtils.findParameterizedType(getClass(), 0);
@@ -114,7 +124,4 @@ public abstract class AbstarctBaseController<M extends BaseModel> {
 
         return currentViewPrefix;
     }
-
-
-
 }
