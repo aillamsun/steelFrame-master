@@ -24,7 +24,7 @@
 
 package com.sung.sframe.mapper;
 
-import com.sung.sframe.common.mapper.BaseMapper;
+import com.sung.sframe.common.dao.mybatis.mapper.BaseMapper;
 import com.sung.sframe.model.UserLoginInfo;
 
 public interface UserLoginInfoMapper extends BaseMapper<UserLoginInfo> {

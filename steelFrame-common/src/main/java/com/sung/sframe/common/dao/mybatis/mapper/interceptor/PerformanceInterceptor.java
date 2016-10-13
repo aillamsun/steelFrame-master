@@ -1,4 +1,4 @@
-package com.sung.sframe.common.mapper.interceptor;
+package com.sung.sframe.common.dao.mybatis.mapper.interceptor;
 
 
 import com.sung.sframe.common.utils.LogUtils;

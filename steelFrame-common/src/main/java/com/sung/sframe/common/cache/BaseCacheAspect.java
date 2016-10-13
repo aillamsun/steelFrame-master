@@ -22,6 +22,7 @@ public class BaseCacheAspect implements InitializingBean{
 
     @Autowired
     private CacheManager cacheManager;
+
     private Cache cache;
     protected String cacheName;
 

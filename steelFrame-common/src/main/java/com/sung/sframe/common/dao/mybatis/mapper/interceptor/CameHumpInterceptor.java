@@ -1,4 +1,4 @@
-package com.sung.sframe.common.mapper.interceptor;
+package com.sung.sframe.common.dao.mybatis.mapper.interceptor;
 
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
 import org.apache.ibatis.plugin.*;

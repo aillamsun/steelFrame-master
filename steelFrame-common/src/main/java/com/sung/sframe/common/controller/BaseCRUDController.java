@@ -158,7 +158,6 @@ public class BaseCRUDController<M extends BaseModel> extends AbstarctBaseControl
 
     /**
      * 得到ModelAndView
-     *
      * @return
      */
     public ModelAndView getModelAndView() {
@@ -167,7 +166,6 @@ public class BaseCRUDController<M extends BaseModel> extends AbstarctBaseControl
 
     /**
      * 得到request对象
-     *
      * @return
      */
     public HttpServletRequest getRequest() {
@@ -232,7 +230,6 @@ public class BaseCRUDController<M extends BaseModel> extends AbstarctBaseControl
 
     /**
      * 添加Model消息
-     *
      * @param messages
      */
     protected void addMessage(Model model, String... messages) {

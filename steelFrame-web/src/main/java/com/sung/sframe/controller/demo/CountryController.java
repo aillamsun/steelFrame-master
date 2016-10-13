@@ -82,7 +82,7 @@ public class CountryController extends BaseCRUDController<Country> {
 
     @RequestMapping("delete")
     public String delete(Integer id) {
-        countryService.delete(id);
+//        countryService.delete(id);
         return "redirect:" + page_list;
     }
 

@@ -25,7 +25,7 @@
 package com.sung.sframe.mapper;
 
 import com.github.pagehelper.PageInfo;
-import com.sung.sframe.common.mapper.BaseMapper;
+import com.sung.sframe.common.dao.mybatis.mapper.BaseMapper;
 import com.sung.sframe.model.Country;
 import com.sung.sframe.model.CountryQueryModel;
 
